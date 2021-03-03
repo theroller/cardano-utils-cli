@@ -1,0 +1,192 @@
+{
+  "name": "@theroller/cardano-utils",
+  "version": "0.0.1",
+  "description": "cardano-node utilities for creating transactions",
+  "main": "src/cmd/index.js",
+  "engine-strict": true,
+  "engines": {
+    "node": "14.x"
+  },
+  "bin": {
+    "cnode": "src/cmd/cnode.js"
+  },
+  "scripts": {
+    "audit": "npm audit",
+    "cover": "nyc mocha",
+    "clean": "rm -rf .nyc_output coverage docs",
+    "lint": "eslint src test",
+    "precover": "npm-run-all lint audit",
+    "prerelease": "npm run cover",
+    "release": "standard-version",
+    "release:test": "standard-version --dry-run",
+    "test": "mocha"
+  },
+  "keywords": [
+    "cli",
+    "cardano",
+    "transaction"
+  ],
+  "files": [
+    "src"
+  ],
+  "author": "James Roller, Jr. <og.readmore@gmail.com>",
+  "homepage": "https://github.com/theroller/cardano-utils#readme",
+  "repository": "github:theroller/cardano-utils",
+  "dependencies": {
+    "bluebird": "^3.7.2",
+    "bunyan": "^1.8.14",
+    "bunyan-format": "^0.2.1",
+    "co": "^4.6.0",
+    "co-prompt": "^1.0.0",
+    "commander": "^6.1.0",
+    "debug": "^4.2.0",
+    "dotenv": "^8.2.0",
+    "lodash": "^4.17.20",
+    "moment": "^2.29.1",
+    "npm-run-all": "^4.1.5"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "babel-eslint": "^10.1.0",
+    "chai": "^4.2.0",
+    "eslint": "^7.11.0",
+    "husky": "^4.3.0",
+    "mocha": "^8.1.3",
+    "nyc": "^15.1.0",
+    "standard-version": "^9.0.0"
+  },
+  "commitlint": {
+    "rules": {
+      "body-leading-blank": [
+        2,
+        "always"
+      ],
+      "body-max-line-length": [
+        2,
+        "always",
+        80
+      ],
+      "footer-leading-blank": [
+        2,
+        "always"
+      ],
+      "footer-max-line-length": [
+        2,
+        "always",
+        80
+      ],
+      "header-max-length": [
+        2,
+        "always",
+        80
+      ],
+      "scope-case": [
+        2,
+        "always",
+        "lower-case"
+      ],
+      "subject-case": [
+        2,
+        "never",
+        [
+          "sentence-case",
+          "start-case"
+        ]
+      ],
+      "subject-empty": [
+        2,
+        "never"
+      ],
+      "subject-full-stop": [
+        2,
+        "never",
+        "."
+      ],
+      "type-case": [
+        2,
+        "always",
+        "lower-case"
+      ],
+      "type-empty": [
+        2,
+        "never"
+      ],
+      "type-enum": [
+        2,
+        "always",
+        [
+          "chore",
+          "ci",
+          "docs",
+          "feat",
+          "fix",
+          "perf",
+          "refactor",
+          "release",
+          "revert",
+          "style",
+          "test"
+        ]
+      ]
+    }
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "mocha": {
+    "recursive": true
+  },
+  "nyc": {
+    "all": true,
+    "cache": true,
+    "exclude": [
+      "coverage",
+      "docs",
+      "test"
+    ],
+    "reporter": [
+      "clover",
+      "lcov",
+      "text-summary"
+    ]
+  },
+  "standard-version": {
+    "types": [
+      {
+        "type": "feat",
+        "section": "Features"
+      },
+      {
+        "type": "fix",
+        "section": "Bug Fixes"
+      },
+      {
+        "type": "chore",
+        "hidden": true
+      },
+      {
+        "type": "docs",
+        "hidden": true
+      },
+      {
+        "type": "style",
+        "hidden": true
+      },
+      {
+        "type": "refactor",
+        "hidden": true
+      },
+      {
+        "type": "perf",
+        "hidden": true
+      },
+      {
+        "type": "test",
+        "hidden": true
+      }
+    ]
+  }
+}
