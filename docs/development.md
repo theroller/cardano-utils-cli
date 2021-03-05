@@ -1,5 +1,29 @@
 # Development Notes
 
+# Configuration Files
+All configuration files are expected to exist on the air-gapped machine.
+
+|File|Sensitive|Location|Description|Command|
+|---|:-:|---|---|---|
+|cold.counter|T|-|issue counter|`cardano-cli node key-gen`|
+|cold.skey|T|-|cold signing key|`cardano-cli node key-gen`|
+|cold.vkey|T|-|cold verification key|`cardano-cli node key-gen`|
+|kes.skey|T|-|kes signing key|?|
+|kes.vkey|F|-|public kes verification key|?|
+|node.cert|?|?|operational certificate|?|
+|payment.addr|F|producer|payment address|`cardano-cli address build`|
+|paymentwithstake.addr|F|producer|payment address associated to a stake address; rewards are withdrawn from the stake adddress|`cardano-cli address build`|
+|payment.skey|T|-|payment signing key|`cardano-cli address key-gen`|
+|payment.vkey|F|-|public payment verification key|`cardano-cli address key-gen`|
+|protocol.json|F|producer|protocol parameters|`cardano-cli query protocol-parameters`|
+|stake.addr|F|producer|stake address|`cardano-cli stake-address build`|
+|stake.cert|T|-|Stake certificate for registering the stake|`cardano-cli stake-address registration-certificate|
+|stake.skey|T|-|stake signing key|`cardano-cli stake-address key-gen`|
+|stake.vkey|F|-|public stake verification key|`cardano-cli stake-address key-gen`|
+|tx.*|F|producer|transaction files|`cardano-utils tx`|
+|vrf.skey|T|-|vrf signing key|?|
+|vrf.vkey|F|-|public vrf verification key|?|
+
 ## How to run a local relay/pool node pair
 The easiest way to get this up is to initially get a relay node running, then copy the entire directory (config and db) to create the pool (aka producer) node. This way you don't have to wait for the pool node to sync its database.
 
@@ -118,12 +142,22 @@ The easiest way to get this up is to initially get a relay node running, then co
     # terminal 1
     cardano-rt-view
 
-    # terminal 2
+    # terminal 2 (start before the pool)
     cd ~/cardano/relay
     cardano-node run --topology testnet-topology.json --database-path db --socket-path db/node.socket --config testnet-config.json --host-addr 0.0.0.0 --port 3001
     
     # terminal 3
     cd ~/cardano/pool
-    cardano-node run --topology testnet-topology.json --database-path db --socket-path db/node.socket --config testnet-config.json --host-addr 0.0.0.0 --port 3002
+    cardano-node run --topology testnet-topology.json --database-path db --socket-path db/node.socket --config testnet-config.json --host-addr 0.0.0.0 --port 3002 --shelley-kes-key ../keys/kes.skey --shelley-vrf-key ../keys/vrf.skey --shelley-operational-certificate ../keys/node.cert
     ```
 1. View the nodes in your browser: http://localhost:8024/. Check that the relay node sees to public peers and the pool node only sees the relay node. Both nodes should be on the same epoch/slot (can also see this in the terminals for the nodes).
+
+## Troubleshooting
+
+### Transactions
+
+#### Transaction: SKEY matches ADDR
+Ensure that the keys respectively match the inputs. This drives the witness count.
+
+#### Transaction: Minimum UTxO value satisfied
+Check the `shelley-genesis.json` file to ensure that you are submitting a transaction where the output values all satisfy the minimum.
