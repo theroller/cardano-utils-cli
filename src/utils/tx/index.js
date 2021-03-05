@@ -28,9 +28,10 @@ module.exports = tx;
 async function tx(inSkeys, inAddrs, outAddrs, amt, opts) {
     const defaultOpts = {
         protoFilepath: null,
-        stakeCertFilepath: null,
+        certFilepaths: [],
         testnet: false,
         useKeyDeposit: false,
+        usePoolDeposit: false,
     };
     opts = Object.assign({}, defaultOpts, opts);
 
@@ -41,13 +42,15 @@ async function tx(inSkeys, inAddrs, outAddrs, amt, opts) {
     } catch(err) {
         errors.push(`could not access protocol parameters\n${err}`);
     }
-    try {
-        if (opts.stakeCertFilepath) {
-            fs.accessSync(opts.stakeCertFilepath, fs.constants.F_OK);
+    opts.certFilepaths.forEach(filepath => {
+        try {
+            if (filepath) {
+                fs.accessSync(filepath, fs.constants.F_OK);
+            }
+        } catch(err) {
+            errors.push(`could not access certificate\n${err}`);
         }
-    } catch(err) {
-        errors.push(`could not access stake certificate\n${err}`);
-    }
+    });
     if (errors.length > 0) {
         log.debug(arguments);
         throw new Error('\n * ' + errors.join('\n * '));
@@ -55,11 +58,15 @@ async function tx(inSkeys, inAddrs, outAddrs, amt, opts) {
 
     // lookup protocol values
     let protoParameters = await readFile(opts.protoFilepath);
-    let { keyDeposit, minUTxOValue } = JSON.parse(protoParameters);
-    log.debug({ keyDeposit, minUTxOValue, filepath: opts.protoFilepath }, 'lookup minUTxOValue');
+    let { keyDeposit, minUTxOValue, poolDeposit } = JSON.parse(protoParameters);
+    log.debug({ keyDeposit, minUTxOValue, poolDeposit, filepath: opts.protoFilepath }, 'lookup minUTxOValue');
 
+    // handle deposits
     if (!opts.useKeyDeposit) {
         keyDeposit = 0;
+    }
+    if (!opts.usePoolDeposit) {
+        poolDeposit = 0;
     }
 
     // lookup the UTXOs for each input address
@@ -87,7 +94,7 @@ async function tx(inSkeys, inAddrs, outAddrs, amt, opts) {
     do {
         log.debug(`utxo loop round ${count}`);
 
-        chosenUtxos = findUtxos(utxos, amt + fee + keyDeposit, minUTxOValue);
+        chosenUtxos = findUtxos(utxos, amt + fee + keyDeposit + poolDeposit, minUTxOValue);
         log.info({ chosenUtxos }, 'chosen utxos');
         inHashes = chosenUtxos.map(utxo => `${utxo.txHash}#${utxo.txIx}`);
 
@@ -96,11 +103,14 @@ async function tx(inSkeys, inAddrs, outAddrs, amt, opts) {
         outAmounts[0] = amt;
 
         // draft
-        let txOpts = { ttl: 0, fee, filepath: './tx.draft', stakeCertFilepath: opts.stakeCertFilepath, verbose: opts.verbose };
+        let txOpts = { ttl: 0, fee, filepath: './tx.draft', certFilepaths: opts.certFilepaths, verbose: opts.verbose };
         let { tx: draftTx, filepath: draftFilepath } = await createTx(inHashes, outAddrs, outAmounts, txOpts);
         log.debug({ draftTx, draftFilepath }, 'draft tx');
 
         // fees
+        if (poolDeposit > 0) {
+            opts.witnessCount = 3;
+        }
         fee = await calculateFee(draftFilepath, chosenUtxos.length, outAddrs.length, './protocol.json', opts);
         log.debug({ fee }, 'fee');
 
@@ -110,8 +120,8 @@ async function tx(inSkeys, inAddrs, outAddrs, amt, opts) {
             .reduce((p, c) => c += p, 0);
 
         // calculate remaining change
-        change = sourceAmount - (amt + fee + keyDeposit);
-        log.info({ sourceAmount, amt, fee, keyDeposit, change }, 'amounts breakdown');
+        change = sourceAmount - (amt + fee + keyDeposit + poolDeposit);
+        log.info({ sourceAmount, amt, fee, keyDeposit, poolDeposit, change }, 'amounts breakdown');
 
         // just in case, prevent an infinite loop
         count++;
@@ -129,7 +139,7 @@ async function tx(inSkeys, inAddrs, outAddrs, amt, opts) {
     const outAmounts = (amt === 0) ? [change] : [amt, change];
 
     // final raw transaction
-    let txOpts = { ttl, fee, filepath: './tx.raw', stakeCertFilepath: opts.stakeCertFilepath, verbose: opts.verbose };
+    let txOpts = { ttl, fee, filepath: './tx.raw', certFilepaths: opts.certFilepaths, verbose: opts.verbose };
     let { tx: rawTx, filepath: rawFilepath } = await createTx(inHashes, outAddrs, outAmounts, txOpts);
     log.debug({ rawTx, rawFilepath }, 'raw tx');
 

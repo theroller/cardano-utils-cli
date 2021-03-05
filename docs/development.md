@@ -8,6 +8,7 @@ All configuration files are expected to exist on the air-gapped machine.
 |cold.counter|T|-|issue counter|`cardano-cli node key-gen`|
 |cold.skey|T|-|cold signing key|`cardano-cli node key-gen`|
 |cold.vkey|T|-|cold verification key|`cardano-cli node key-gen`|
+|delegation.cert|F|cold,producer|delegation (pledge) certificate|`cardano-cli stake-address delegation-certificate`|
 |kes.skey|T|-|kes signing key|?|
 |kes.vkey|F|-|public kes verification key|?|
 |node.cert|?|?|operational certificate|?|
@@ -15,6 +16,7 @@ All configuration files are expected to exist on the air-gapped machine.
 |paymentwithstake.addr|F|producer|payment address associated to a stake address; rewards are withdrawn from the stake adddress|`cardano-cli address build`|
 |payment.skey|T|-|payment signing key|`cardano-cli address key-gen`|
 |payment.vkey|F|-|public payment verification key|`cardano-cli address key-gen`|
+|pool-registration.cert|F|cold,producer|pool certificate|`cardano-cli stake-pool registration-certificate`|
 |protocol.json|F|producer|protocol parameters|`cardano-cli query protocol-parameters`|
 |stake.addr|F|producer|stake address|`cardano-cli stake-address build`|
 |stake.cert|T|-|Stake certificate for registering the stake|`cardano-cli stake-address registration-certificate|
@@ -23,6 +25,43 @@ All configuration files are expected to exist on the air-gapped machine.
 |tx.*|F|producer|transaction files|`cardano-utils tx`|
 |vrf.skey|T|-|vrf signing key|?|
 |vrf.vkey|F|-|public vrf verification key|?|
+
+## pool-registration.cert (cold)
+```
+cardano-cli stake-pool registration-certificate \
+--out-file pool-registration.cert \
+--cold-verification-key-file cold.vkey \
+--vrf-verification-key-file vrf.vkey \
+--pool-reward-account-verification-key-file stake.vkey \
+--pool-owner-stake-verification-key-file stake.vkey \
+--pool-pledge 70000000 \
+--pool-cost 340000000 \
+--pool-margin 0.04 \
+--testnet-magic 1097911063 \
+--metadata-url https://git.io/JqJXa \
+--metadata-hash 5b9e30153e5b33ae496957bded12095ddac318b777690afb754f3f63a3982559 \
+--pool-relay-ipv4 172.18.64.172 \
+--pool-relay-port 3001
+```
+
+## delegation.cert (cold)
+```
+cardano-cli stake-address delegation-certificate \
+--stake-verification-key-file stake.vkey \
+--cold-verification-key-file cold.vkey \
+--out-file delegation.cert
+```
+
+cardano-cli transaction calculate-min-fee \
+--byron-witness-count 0 \
+--protocol-params-file ./protocol.json \
+--testnet-magic 1097911063 \
+--tx-body-file ./tx.draft \
+--tx-in-count 1 \
+--tx-out-count 1 \
+--witness-count 1
+
+pool1pwwmgvzsv4pu7wyr8hadpv0klhp284mrxd9sla579duxj56j49u
 
 ## How to run a local relay/pool node pair
 The easiest way to get this up is to initially get a relay node running, then copy the entire directory (config and db) to create the pool (aka producer) node. This way you don't have to wait for the pool node to sync its database.
