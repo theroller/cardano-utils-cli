@@ -30,6 +30,7 @@ async function tx(inSkeys, inAddrs, outAddrs, amt, opts) {
         protoFilepath: null,
         certFilepaths: [],
         testnet: false,
+        ttl: null,
         useKeyDeposit: false,
         usePoolDeposit: false,
     };
@@ -127,13 +128,20 @@ async function tx(inSkeys, inAddrs, outAddrs, amt, opts) {
         count++;
     } while ((change < 0 || change < minUTxOValue) && count < utxos.length);
 
-    // get the tip of the blockchain
-    const tip = await queryTip(opts);
-    log.info({ tip }, 'blockchain tip');
-
     // ttl
-    const ttl = tip.slotNo + TTL_DELAY;
-    log.info({ ttl }, 'calculated TTL');
+    let ttl;
+    if (opts.ttl) {
+        ttl = opts.ttl;
+        log.info({ ttl }, 'user provided TTL');
+    } else {
+        // get the tip of the blockchain
+        const tip = await queryTip(opts);
+        log.info({ tip }, 'blockchain tip');
+
+        // ttl
+        ttl = tip.slotNo + TTL_DELAY;
+        log.info({ ttl }, 'calculated TTL');
+    }
 
     // allow the full input balance to transfer to the output address when amt is 0
     const outAmounts = (amt === 0) ? [change] : [amt, change];

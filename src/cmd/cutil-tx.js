@@ -33,6 +33,7 @@ async function run() {
             .option('--keyDeposit', 'Include key deposit from protocol parameters', false)
             .option('--poolDeposit', 'Include pool deposit from protocol parameters', false)
             .option('-t, --testnet', 'Use testnet magic', false)
+            .option('--ttl <value>', 'OFFLINE: set the TTL without querying the tip.', 0)
             .option('-v, --verbose', 'Verbosity level that can be increased.', parseVerbose, 0)
             .action((_amt) => {
                 amt = _amt;
@@ -52,6 +53,7 @@ async function run() {
             protoFilepath: program.proto,
             certFilepaths: program.cert,
             testnet: program.testnet,
+            ttl: program.ttl,
             useKeyDeposit: program.keyDeposit,
             usePoolDeposit: program.poolDeposit,
             verbose: program.verbose,
