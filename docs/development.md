@@ -11,7 +11,7 @@ All configuration files are expected to exist on the air-gapped machine.
 |delegation.cert|F|cold->producer|delegation (pledge) certificate|`cardano-cli stake-address delegation-certificate`|
 |kes.skey|T|cold->producer|kes signing key|`cardano-cli node key-gen-KES --verification-key-file kes.vkey --signing-key-file kes.skey`|
 |kes.vkey|F|cold|public kes verification key|`cardano-cli node key-gen-KES --verification-key-file kes.vkey --signing-key-file kes.skey`|
-|node.cert|?|cold->producer|operational certificate|?|
+|node.cert|F|cold->producer|operational certificate linked to KES|`cardano-cli node issue-op-cert`|
 |payment.addr|F|cold->producer|payment address|`cardano-cli address build`|
 |paymentwithstake.addr|F|cold->producer|payment address associated to a stake address; rewards are withdrawn from the stake adddress|`cardano-cli address build --payment-verification-key-file payment.vkey --stake-verification-key-file stake.vkey --out-file paymentwithstake.addr --mainnet`|
 |payment.skey|T|cold|payment signing key|`cardano-cli address key-gen`|
