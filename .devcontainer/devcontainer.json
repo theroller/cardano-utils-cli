@@ -2,6 +2,7 @@
     "name": "${containerWorkspaceFolderBasename}",
     "dockerFile": "Dockerfile",
     "extensions": [
+        "dbaeumer.vscode-eslint",
         "mechatroner.rainbow-csv",
         "mhutchie.git-graph",
         "ms-azuretools.vscode-docker",
