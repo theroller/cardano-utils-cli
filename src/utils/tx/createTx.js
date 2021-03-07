@@ -60,7 +60,7 @@ async function createTx(inHashes=[], outAddrs=[], outAmounts=[], opts) {
     // fee
     cmd += ` --fee ${opts.fee}`;
     // certificate
-   for (let i=0; i< opts.certFilepaths.length; i++) {
+    for (let i=0; i< opts.certFilepaths.length; i++) {
         cmd += ` --certificate-file ${opts.certFilepaths[i]}`;
     }
 
