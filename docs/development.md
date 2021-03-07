@@ -5,26 +5,27 @@ All configuration files are expected to exist on the air-gapped machine.
 
 |File|Sensitive|Location|Description|Command|
 |---|:-:|---|---|---|
-|cold.counter|T|-|issue counter|`cardano-cli node key-gen`|
-|cold.skey|T|-|cold signing key|`cardano-cli node key-gen`|
-|cold.vkey|T|-|cold verification key|`cardano-cli node key-gen`|
-|delegation.cert|F|cold,producer|delegation (pledge) certificate|`cardano-cli stake-address delegation-certificate`|
-|kes.skey|T|-|kes signing key|?|
-|kes.vkey|F|-|public kes verification key|?|
-|node.cert|?|?|operational certificate|?|
-|payment.addr|F|producer|payment address|`cardano-cli address build`|
-|paymentwithstake.addr|F|producer|payment address associated to a stake address; rewards are withdrawn from the stake adddress|`cardano-cli address build`|
-|payment.skey|T|-|payment signing key|`cardano-cli address key-gen`|
-|payment.vkey|F|-|public payment verification key|`cardano-cli address key-gen`|
-|pool-registration.cert|F|cold,producer|pool certificate|`cardano-cli stake-pool registration-certificate`|
-|protocol.json|F|producer|protocol parameters|`cardano-cli query protocol-parameters`|
-|stake.addr|F|producer|stake address|`cardano-cli stake-address build`|
-|stake.cert|T|-|Stake certificate for registering the stake|`cardano-cli stake-address registration-certificate|
-|stake.skey|T|-|stake signing key|`cardano-cli stake-address key-gen`|
-|stake.vkey|F|-|public stake verification key|`cardano-cli stake-address key-gen`|
+|cold.counter|T|cold|issue counter|`cardano-cli node key-gen`|
+|cold.skey|T|cold|cold signing key|`cardano-cli node key-gen`|
+|cold.vkey|T|cold|cold verification key|`cardano-cli node key-gen`|
+|delegation.cert|F|cold->producer|delegation (pledge) certificate|`cardano-cli stake-address delegation-certificate`|
+|kes.skey|T|cold->producer|kes signing key|`cardano-cli node key-gen-KES --verification-key-file kes.vkey --signing-key-file kes.skey`|
+|kes.vkey|F|cold|public kes verification key|`cardano-cli node key-gen-KES --verification-key-file kes.vkey --signing-key-file kes.skey`|
+|node.cert|?|cold->producer|operational certificate|?|
+|payment.addr|F|cold->producer|payment address|`cardano-cli address build`|
+|paymentwithstake.addr|F|cold->producer|payment address associated to a stake address; rewards are withdrawn from the stake adddress|`cardano-cli address build --payment-verification-key-file payment.vkey --stake-verification-key-file stake.vkey --out-file paymentwithstake.addr --mainnet`|
+|payment.skey|T|cold|payment signing key|`cardano-cli address key-gen`|
+|payment.vkey|F|cold|public payment verification key|`cardano-cli address key-gen`|
+|pool-registration.cert|F|cold->producer|pool certificate|`cardano-cli stake-pool registration-certificate`|
+|poolid.txt|F|cold->producer|pool id|`cardano-cli stake-pool id --cold-verification-key-file cold.vkey --output-format hex > poolid.txt`|
+|protocol.json|F|producer|protocol parameters|`cardano-cli query protocol-parameters --mainnet --mary-era --out-file protocol.json`|
+|stake.addr|F|cold->producer|stake address|`cardano-cli stake-address build`|
+|stake.cert|T|cold->producer|Stake certificate for registering the stake|`cardano-cli stake-address registration-certificate --stake-verification-key-file stake.vkey --out-file stake.cert`|
+|stake.skey|T|cold|stake signing key|`cardano-cli stake-address key-gen`|
+|stake.vkey|F|cold|public stake verification key|`cardano-cli stake-address key-gen`|
 |tx.*|F|producer|transaction files|`cardano-utils tx`|
-|vrf.skey|T|-|vrf signing key|?|
-|vrf.vkey|F|-|public vrf verification key|?|
+|vrf.skey|T|cold->producer|vrf signing key|?|
+|vrf.vkey|F|cold|public vrf verification key|?|
 
 ## pool-registration.cert (cold)
 ```
