@@ -1,0 +1,27 @@
+{
+    "breadcrumbs.enabled": true,
+    "editor.formatOnSave": true,
+    "editor.stickyTabStops": true,
+    "files.encoding": "utf8",
+    "files.eol": "\n",
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    "git.pruneOnFetch": true,
+    "terminal.integrated.scrollback": 10000,
+    "xml.symbols.maxItemsComputed": 50000,
+    "[dockerfile]": {
+        "editor.formatOnSave": false,
+        "editor.quickSuggestions": {
+            "strings": true
+        }
+    },
+    "[markdown]": {
+        "files.trimTrailingWhitespace": false
+    },
+    "[yaml]": {
+        "editor.detectIndentation": false,
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2
+    }
+}

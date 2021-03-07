@@ -14,6 +14,7 @@ module.exports = calculateFee;
 async function calculateFee(txPath, numInputs, numOutputs, protocolFilepath='./protocol.json', opts) {
     const defaultOpts = {
         testnet: false,
+        witnessCount: 1,
         verbose: false,
     };
     opts = Object.assign({}, defaultOpts, opts);
@@ -22,7 +23,7 @@ async function calculateFee(txPath, numInputs, numOutputs, protocolFilepath='./p
     cmd += ` --tx-body-file ${txPath}`;
     cmd += ` --tx-in-count ${numInputs}`;
     cmd += ` --tx-out-count ${numOutputs}`;
-    cmd += ' --witness-count 1';
+    cmd += ` --witness-count ${opts.witnessCount}`;
     cmd += ' --byron-witness-count 0';
     cmd += ` --protocol-params-file ${protocolFilepath}`;
 

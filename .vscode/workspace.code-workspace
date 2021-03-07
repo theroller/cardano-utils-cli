@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../node-test"
+		}
+	],
+	"settings": {
+		"breadcrumbs.enabled": true,
+		"terminal.integrated.scrollback": 10000
+	}
+}

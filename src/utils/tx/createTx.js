@@ -14,7 +14,7 @@ async function createTx(inHashes=[], outAddrs=[], outAmounts=[], opts) {
     const defaultOpts = {
         fee:0,
         filepath:'./tx.draft',
-        stakeCertFilepath: null,
+        certFilepaths: [],
         ttl:0,
         verbose: false,
     };
@@ -59,9 +59,9 @@ async function createTx(inHashes=[], outAddrs=[], outAmounts=[], opts) {
     cmd += ` --ttl ${opts.ttl}`;
     // fee
     cmd += ` --fee ${opts.fee}`;
-    // stake certificate
-    if (opts.stakeCertFilepath) {
-        cmd += ` --certificate-file ${opts.stakeCertFilepath}`;
+    // certificate
+    for (let i=0; i< opts.certFilepaths.length; i++) {
+        cmd += ` --certificate-file ${opts.certFilepaths[i]}`;
     }
 
     debug(`tx command: ${cmd}`);

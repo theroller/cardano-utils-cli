@@ -1,0 +1,21 @@
+{
+    "name": "${containerWorkspaceFolderBasename}",
+    "dockerFile": "Dockerfile",
+    "extensions": [
+        "dbaeumer.vscode-eslint",
+        "mechatroner.rainbow-csv",
+        "mhutchie.git-graph",
+        "ms-azuretools.vscode-docker",
+        "tyriar.windows-terminal"
+    ],
+    "mounts": [
+        // "source=vsc-${containerWorkspaceFolderBasename},target=/root/.vscode-server/extensions,type=volume",
+        "source=${localWorkspaceFolder}/../node-test,target=${containerWorkspaceFolder}/../node-test,type=bind,consistency=cached",
+        "source=${localEnv:HOME},target=/host-home-folder,type=bind,consistency=cached",
+        "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+    ],
+    "postCreateCommand": "bash -i .devcontainer/devcontainer-init.sh",
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+    }
+}
