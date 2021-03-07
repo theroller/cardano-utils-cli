@@ -1,7 +1,6 @@
 'use strict';
 
 const log = require('../log').child({ method: 'tx' });
-const debug = require('debug')('@theroller:cardano-utils:utils:tx');
 
 const fs = require('fs');
 
