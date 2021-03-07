@@ -14,6 +14,12 @@ const queryUtxos = require('../query-utxos');
 module.exports = lookupUtxos;
 
 async function lookupUtxos(amt, inAddrs, outAddrs, opts) {
+    // validations
+    amt = parseInt(amt, 10);
+    if (!Number.isInteger(amt)) {
+        throw new Error(`failed to convert ${amt} to an integer`);
+    }
+
     // lookup protocol values
     let protoParameters = await readFile(opts.protoFilepath);
     let { keyDeposit, minUTxOValue, poolDeposit } = JSON.parse(protoParameters);
@@ -27,18 +33,30 @@ async function lookupUtxos(amt, inAddrs, outAddrs, opts) {
         poolDeposit = 0;
     }
 
-    // lookup the UTXOs for each input address
-    let queries = inAddrs.map(inAddr => queryUtxos(inAddr, opts));
-    let utxoObjs = await Promise.all(queries);
+    // utxos
+    let utxos = [];
+    if (opts.utxos.length > 0) {
+        // user provided utxos
+        for (let i=0; i< opts.utxos.length; i++) {
+            const match = /^([\da-f]+)#(\d+):(\d+)$/.exec(opts.utxos[i]);
+            if (!match) {
+                throw new Error(`failed to parse user provided utxo: ${opts.utxos[i]}`);
+            }
 
-    // flatten utxos
-    const utxos = utxoObjs.map(x => x.values).flat();
-    log.debug({ utxos }, 'utxos');
+            utxos.push({
+                amount: parseInt(match[3], 10),
+                txHash: match[1],
+                txIx: match[2],
+            });
+        }
+    } else {
+        // lookup the UTXOs for each input address on the network
+        let queries = inAddrs.map(inAddr => queryUtxos(inAddr, opts));
+        let utxoObjs = await Promise.all(queries);
 
-    // parse the amount
-    amt = parseInt(amt, 10);
-    if (!Number.isInteger(amt)) {
-        throw new Error(`failed to convert ${amt} to an integer`);
+        // flatten utxos
+        utxos = utxoObjs.map(x => x.values).flat();
+        log.debug({ utxos }, 'utxos');
     }
 
     // Since we don't know the fees ahead of time, we potentially must loop

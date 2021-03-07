@@ -27,6 +27,7 @@ async function tx(inSkeys, inAddrs, outAddrs, amt, opts) {
         certFilepaths: [],
         testnet: false,
         ttl: null,
+        utxos: [],
         useKeyDeposit: false,
         usePoolDeposit: false,
     };

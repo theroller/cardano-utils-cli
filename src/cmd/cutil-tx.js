@@ -34,6 +34,7 @@ async function run() {
             .option('--poolDeposit', 'Include pool deposit from protocol parameters', false)
             .option('-t, --testnet', 'Use testnet magic', false)
             .option('--ttl <value>', 'OFFLINE: set the TTL without querying the tip.', 0)
+            .option('--utxo <TxHash#TxIx:Amount>', 'OFFLINE: identify the UTxO(s) for the input payment addresses (may specify multiple)', (v,p) => p.concat([v]), [])
             .option('-v, --verbose', 'Verbosity level that can be increased.', parseVerbose, 0)
             .action((_amt) => {
                 amt = _amt;
@@ -54,6 +55,7 @@ async function run() {
             certFilepaths: program.cert,
             testnet: program.testnet,
             ttl: program.ttl,
+            utxos: program.utxo,
             useKeyDeposit: program.keyDeposit,
             usePoolDeposit: program.poolDeposit,
             verbose: program.verbose,
