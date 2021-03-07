@@ -9,13 +9,13 @@ const log = bunyan.createLogger({
     version,
     streams: [
         {
-            level: process.env.CNODE_LOG || 'trace',
+            level: process.env.CUTIL_LOG || 'trace',
             stream: bunyanFormat({ outputMode: 'short', color: true })
         },
         {
             type: 'rotating-file',
-            path: '/tmp/cnode.log',
-            level: process.env.CNODE_LOG || 'trace',
+            path: '/tmp/cutil.log',
+            level: process.env.CUTIL_LOG || 'trace',
         },
     ]
 });

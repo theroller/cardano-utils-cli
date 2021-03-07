@@ -11,7 +11,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/src/cmd/cnode-tx.js",
+            "program": "${workspaceFolder}/src/cmd/cutil-tx.js",
             "args": [
                 "test"
             ]
