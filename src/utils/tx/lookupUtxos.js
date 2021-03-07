@@ -14,12 +14,6 @@ const queryUtxos = require('../query-utxos');
 module.exports = lookupUtxos;
 
 async function lookupUtxos(amt, inAddrs, outAddrs, opts) {
-    // validations
-    amt = parseInt(amt, 10);
-    if (!Number.isInteger(amt)) {
-        throw new Error(`failed to convert ${amt} to an integer`);
-    }
-
     // lookup protocol values
     let protoParameters = await readFile(opts.protoFilepath);
     let { keyDeposit, minUTxOValue, poolDeposit } = JSON.parse(protoParameters);

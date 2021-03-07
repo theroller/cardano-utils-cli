@@ -10,8 +10,6 @@ const lookupUtxos = require('./lookupUtxos');
 const queryTip = require('../query-tip');
 const signTx = require('./signTx');
 
-const { TTL_DELAY } = require('../../constants');
-
 module.exports = tx;
 
 /**
@@ -23,13 +21,15 @@ module.exports = tx;
  */
 async function tx(inSkeys, inAddrs, outAddrs, amt, opts) {
     const defaultOpts = {
-        protoFilepath: null,
         certFilepaths: [],
+        fee: null,
+        offline: false,
+        protoFilepath: null,
         testnet: false,
-        ttl: null,
-        utxos: [],
+        ttlDelay: 0,
         useKeyDeposit: false,
         usePoolDeposit: false,
+        utxos: [],
     };
     opts = Object.assign({}, defaultOpts, opts);
 
@@ -49,6 +49,11 @@ async function tx(inSkeys, inAddrs, outAddrs, amt, opts) {
             errors.push(`could not access certificate\n${err}`);
         }
     });
+    // validations
+    amt = parseInt(amt, 10);
+    if (!Number.isInteger(amt)) {
+        errors.push(`failed to convert ${amt} to an integer`);
+    }
     if (errors.length > 0) {
         log.debug(arguments);
         throw new Error('\n * ' + errors.join('\n * '));
@@ -58,19 +63,13 @@ async function tx(inSkeys, inAddrs, outAddrs, amt, opts) {
     const { change, fee, inHashes } = await lookupUtxos(amt, inAddrs, outAddrs, opts);
 
     // ttl
-    let ttl;
-    if (opts.ttl) {
-        ttl = opts.ttl;
-        log.info({ ttl }, 'user provided TTL');
-    } else {
-        // get the tip of the blockchain
-        const tip = await queryTip(opts);
-        log.info({ tip }, 'blockchain tip');
+    // get the tip of the blockchain
+    const tip = await queryTip(opts);
+    log.info({ tip }, 'blockchain tip');
 
-        // ttl
-        ttl = tip.slotNo + TTL_DELAY;
-        log.info({ ttl }, 'calculated TTL');
-    }
+    // ttl
+    const ttl = tip.slotNo + parseInt(opts.ttlDelay, 10);
+    log.info({ ttl }, 'calculated TTL');
 
     // allow the full input balance to transfer to the output address when amt is 0
     const outAmounts = (amt === 0) ? [change] : [amt, change];
@@ -81,8 +80,11 @@ async function tx(inSkeys, inAddrs, outAddrs, amt, opts) {
     log.debug({ rawTx, rawFilepath }, 'raw tx');
 
     // sign transaction
-    let { tx: signedTx, filepath: signedFilepath } = await signTx(rawFilepath, inSkeys, { testnet: opts.testnet, verbose: opts.verbose });
-    log.debug({ signedTx, signedFilepath }, 'signed tx');
-
-    return signedTx;
+    if (inSkeys.length > 0) {
+        let { tx: signedTx, filepath: signedFilepath } = await signTx(rawFilepath, inSkeys, { testnet: opts.testnet, verbose: opts.verbose });
+        log.debug({ signedTx, signedFilepath }, 'signed tx');
+        return signedTx;
+    } else {
+        return rawTx;
+    }
 }
