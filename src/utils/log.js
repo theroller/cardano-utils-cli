@@ -14,7 +14,7 @@ const log = bunyan.createLogger({
         },
         {
             type: 'rotating-file',
-            path: '/tmp/cutil.log',
+            path: '/tmp/cutils.log',
             level: process.env.CUTIL_LOG || 'trace',
         },
     ]

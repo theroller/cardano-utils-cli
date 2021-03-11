@@ -4,9 +4,6 @@
 
 require('dotenv').config();
 
-// const co = require('co');
-// const prompt = require('co-prompt');
-// const moment = require('moment');
 const program = require('commander');
 
 const parseVerbose = require('../utils/parseVerbose');
@@ -19,18 +16,21 @@ async function run() {
     try {
 
         program.on('option:debug', function () {
-            process.env.DEBUG = '@theroller:cardano-utils:*';
+            process.env.DEBUG = '@theroller:cardano-utils-cli:*';
             process.env.DEBUG_COLORS = 1;
         });
 
         // Parse command arguments and options
+        let address;
         program
+            .arguments('<address>')
             .description('This utility generates a cardano transaction.')
             .option('-d, --debug', 'Output additional debug information.')
             .option('-t, --testnet', 'Use testnet magic', false)
             .option('-v, --verbose', 'Verbosity level that can be increased.', parseVerbose, 0)
-            .action(() => {
-                debug = require('debug')('@theroller:cardano-utils:cmd:queryTip');
+            .action((_address) => {
+                address = _address;
+                debug = require('debug')('@theroller:cardano-utils-cli:cmd:queryUtxos');
             });
 
         await program.parseAsync(process.argv);
@@ -39,12 +39,6 @@ async function run() {
         if (program.verbose > 1) {
             console.time('Processing Time');
         }
-
-        // await co(function* () {
-        //     if (!process.env.PASSWORD) {
-        //         process.env.PASSWORD = yield prompt.password('password: ');
-        //     }
-        // });
 
         // Display Arguments/Options
         const opts = {
@@ -62,10 +56,10 @@ async function run() {
         debug('argument and options processing complete');
 
         // Run Command Logic
-        const cmd = require('../utils/query-tip');
-        const tip = await cmd(opts);
+        const cmd = require('../utils/query-utxos');
+        const utxo = await cmd(address, opts);
 
-        log.info({ tip }, 'queryTip result');
+        log.info({ address, utxo }, 'queryUtxos result');
     }
     catch (err) {
         // Record the Error

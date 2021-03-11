@@ -1,7 +1,7 @@
 'use strict';
 
 const log = require('../log').child({ method: 'tx.calculateFee' });
-const debug = require('debug')('@theroller:cardano-utils:utils:tx:calculateFee');
+const debug = require('debug')('@theroller:cardano-utils-cli:utils:tx:calculateFee');
 
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);

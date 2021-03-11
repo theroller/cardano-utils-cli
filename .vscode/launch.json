@@ -11,7 +11,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/src/cmd/cutil-tx.js",
+            "program": "${workspaceFolder}/src/cmd/cutils-tx.js",
             "args": [
                 "test"
             ]

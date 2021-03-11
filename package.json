@@ -1,5 +1,5 @@
 {
-  "name": "@theroller/cardano-utils",
+  "name": "cardano-utils-cli",
   "version": "0.1.0",
   "description": "cardano-node utilities for creating transactions",
   "main": "src/cmd/index.js",
@@ -8,7 +8,7 @@
     "node": "14.x"
   },
   "bin": {
-    "cutil": "src/cmd/cutil.js"
+    "cutils": "src/cmd/cutils.js"
   },
   "scripts": {
     "audit": "npm audit",
@@ -22,16 +22,19 @@
     "test": "mocha"
   },
   "keywords": [
+    "ada",
+    "blockchain",
     "cli",
     "cardano",
+    "cryptocurrency",
     "transaction"
   ],
   "files": [
     "src"
   ],
   "author": "James Roller, Jr. <og.readmore@gmail.com>",
-  "homepage": "https://github.com/theroller/cardano-utils#readme",
-  "repository": "github:theroller/cardano-utils",
+  "homepage": "https://github.com/theroller/cardano-utils-cli#readme",
+  "repository": "github:theroller/cardano-utils-cli",
   "dependencies": {
     "bluebird": "^3.7.2",
     "bunyan": "^1.8.14",

@@ -23,7 +23,7 @@ All configuration files are expected to exist on the air-gapped machine.
 |stake.cert|T|cold->producer|Stake certificate for registering the stake|`cardano-cli stake-address registration-certificate --stake-verification-key-file stake.vkey --out-file stake.cert`|
 |stake.skey|T|cold|stake signing key|`cardano-cli stake-address key-gen`|
 |stake.vkey|F|cold|public stake verification key|`cardano-cli stake-address key-gen`|
-|tx.*|F|producer|transaction files|`cardano-utils tx`|
+|tx.*|F|producer|transaction files|`cutils tx`|
 |vrf.skey|T|cold->producer|vrf signing key|?|
 |vrf.vkey|F|cold|public vrf verification key|?|
 

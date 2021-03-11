@@ -1,7 +1,7 @@
 'use strict';
 
 const log = require('../log').child({ method: 'tx.createTx' });
-const debug = require('debug')('@theroller:cardano-utils:utils:tx:createTx');
+const debug = require('debug')('@theroller:cardano-utils-cli:utils:tx:createTx');
 
 const util = require('util');
 const readFile = util.promisify(require('fs').readFile);

@@ -1,7 +1,7 @@
 'use strict';
 
 const log = require('./log').child({ method: 'queryUtxos' });
-const debug = require('debug')('@theroller:cardano-utils:utils:queryUtxos');
+const debug = require('debug')('@theroller:cardano-utils-cli:utils:queryUtxos');
 
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);

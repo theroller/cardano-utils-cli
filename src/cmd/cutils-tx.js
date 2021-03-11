@@ -17,7 +17,7 @@ async function run() {
     try {
 
         program.on('option:debug', function () {
-            process.env.DEBUG = '@theroller:cardano-utils:*';
+            process.env.DEBUG = '@theroller:cardano-utils-cli:*';
             process.env.DEBUG_COLORS = 1;
         });
 
@@ -26,22 +26,22 @@ async function run() {
         program
             .arguments('<amt>')
             .description('This utility generates a cardano transaction for the given amount. If the amt is zero, then all funds will be transferred from the input. If no signing keys are specified, then the unsigned transaction if output.')
-            .option('-d, --debug', 'Output additional debug information.')
-            .option('--in <value>', 'Input address (may specify multiple)', (v,p) => p.concat([v]), [])
-            .option('--cert <filepath>', 'Certificate filepath (may specify multiple)', (v,p) => p.concat([v]), [])
-            .option('--skey <filepath>', 'There must be on filepath for every input address respectively (may specify multiple)', (v,p) => p.concat([v]), [])
-            .option('--out <value>', 'Output address (may specify multiple)', (v,p) => p.concat([v]), [])
-            .option('--outTxFilepath <filepath>', 'Copy resultant transaction to the specified filepath.')
-            .option('--proto <filepath>', 'Filepath to the protocol parameters', './protocol.json')
+            .option('--in <value>', 'Input addresses (may specify multiple)', (v,p) => p.concat([v]), [])
+            .option('--cert <filepath>', 'Certificate filepaths (may specify multiple)', (v,p) => p.concat([v]), [])
+            .option('--skey <filepath>', 'Signing Key filepaths (may specify multiple)', (v,p) => p.concat([v]), [])
+            .option('--out <value>', 'Output addresses (may specify multiple)', (v,p) => p.concat([v]), [])
+            .option('--outTxFilepath <filepath>', 'Copy final transaction to the specified filepath.')
             .option('--keyDeposit', 'Include key deposit from protocol parameters', false)
             .option('--poolDeposit', 'Include pool deposit from protocol parameters', false)
             .option('-t, --testnet', 'Use testnet magic', false)
+            .option('--proto <filepath>', 'Filepath to the protocol parameters', './protocol.json')
             .option('--ttlDelay <value>', 'Set the TTL delay.', 10000)
             .option('--utxo <TxHash#TxIx:Amount>', 'Identify the UTxO(s) for the input payment addresses (may specify multiple)', (v,p) => p.concat([v]), [])
+            .option('-d, --debug', 'Output additional debug information.')
             .option('-v, --verbose', 'Verbosity level that can be increased.', parseVerbose, 0)
             .action((_amt) => {
                 amt = _amt;
-                debug = require('debug')('@theroller:cardano-utils:cmd:queryTx');
+                debug = require('debug')('@theroller:cardano-utils-cli:cmd:queryTx');
             });
 
         await program.parseAsync(process.argv);

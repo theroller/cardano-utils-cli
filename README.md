@@ -1,11 +1,11 @@
-# cardano-utils
+# cardano-utils-cli
 Cardano utilities.
 
 The CLI has built-in help information. Use the following commands to get to the help.
 
 ```bash
 npm link
-cardano-utils -h
+cardano-utils-cli -h
 ```
 
 ## Devcontainer
@@ -34,7 +34,7 @@ Create transactions. Offline transactions can be created by specifying the TTL a
 ```bash
 # simple transaction on testnet
 # 1000000 from payment2.addr => paymentwithstake.addr
-cutil tx 1000000 -t -v --in $(cat payment2.addr) --skey payment2.skey \
+cutils tx 1000000 -t -v --in $(cat payment2.addr) --skey payment2.skey \
     --out $(cat paymentwithstake.addr) \
     --out $(cat payment2.addr)
 ```
@@ -42,7 +42,7 @@ cutil tx 1000000 -t -v --in $(cat payment2.addr) --skey payment2.skey \
 #### Register Stake Address (Key Deposit)
 ```bash
 # HOT
-cutil tx 0 -v --keyDeposit \
+cutils tx 0 -v --keyDeposit \
     --in $(cat paymentwithstake.addr) \
     --out $(cat paymentwithstake.addr) \
     --cert stake.cert \
@@ -65,7 +65,7 @@ cardano-cli transaction submit \
 #### Register Stake Pool (Pool Deposit)
 ```bash
 #HOT
-cutil tx 0 -v --poolDeposit \
+cutils tx 0 -v --poolDeposit \
     --in $(cat paymentwithstake.addr) \
     --out $(cat paymentwithstake.addr) \
     --cert pool-registration.cert \
