@@ -16,7 +16,7 @@ async function run() {
     try {
 
         program.on('option:debug', function () {
-            process.env.DEBUG = '@theroller:cardano-utils-cli:*';
+            process.env.DEBUG = 'cardano-utils-cli:*';
             process.env.DEBUG_COLORS = 1;
         });
 
@@ -30,7 +30,7 @@ async function run() {
             .option('-v, --verbose', 'Verbosity level that can be increased.', parseVerbose, 0)
             .action((_address) => {
                 address = _address;
-                debug = require('debug')('@theroller:cardano-utils-cli:cmd:queryUtxos');
+                debug = require('debug')('cardano-utils-cli:cmd:queryUtxos');
             });
 
         await program.parseAsync(process.argv);

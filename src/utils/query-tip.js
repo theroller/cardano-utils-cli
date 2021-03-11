@@ -1,7 +1,7 @@
 'use strict';
 
 const log = require('./log').child({ method: 'queryTip' });
-const debug = require('debug')('@theroller:cardano-utils-cli:utils:queryTip');
+const debug = require('debug')('cardano-utils-cli:utils:queryTip');
 
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
