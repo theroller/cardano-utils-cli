@@ -103,7 +103,7 @@ RUN git clone https://github.com/input-output-hk/libsodium \
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 
-## cardano-cli / cardano-node
+## cardano-cli / cardano-node v1.25.1
 # eventually bring this into the devcontainer, for now the cardano binaries are built externally
 ADD https://onedrive.live.com/download?cid=B5030F105D60037F&resid=B5030F105D60037F%2184432&authkey=ADJAhRNzHsnwdj8 /usr/local/bin/cardano-cli
 ADD https://onedrive.live.com/download?cid=B5030F105D60037F&resid=B5030F105D60037F%2184434&authkey=APv3Jg-0yM720RQ /usr/local/bin/cardano-node
