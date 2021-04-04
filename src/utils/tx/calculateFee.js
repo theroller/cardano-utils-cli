@@ -48,7 +48,7 @@ async function calculateFee(txPath, numInputs, numOutputs, protocolFilepath='./p
     if (stdout) {
         let lines = stdout.split(/\r?\n/);
         const [ feeString ] = lines[0].split(/\s+/);
-        const fee = parseInt(feeString, 10) + opts.additionalFee;
+        const fee = parseInt(feeString, 10) + parseInt(opts.additionalFee, 10);
         if (Number.isNaN(fee)) {
             throw new Error(`failed to convert ${feeString} to an integer`);
         }
