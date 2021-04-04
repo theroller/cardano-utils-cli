@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0-beta](https://github.com/theroller/cardano-utils-cli/compare/v0.2.1...v0.3.0-beta) (2021-04-04)
+
+
+### Features
+
+* add additionalFee flag ([99c8663](https://github.com/theroller/cardano-utils-cli/commit/99c8663898240e9a233d0c24ea78be2d2a78a02c))
+
 ### [0.2.1](https://github.com/theroller/cardano-utils-cli/compare/v0.2.0...v0.2.1) (2021-03-11)
 
 ## [0.2.0](https://github.com/theroller/cardano-utils-cli/compare/v0.1.0...v0.2.0) (2021-03-11)
