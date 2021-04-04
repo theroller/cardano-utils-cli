@@ -20,6 +20,7 @@ module.exports = tx;
  */
 async function tx(inSkeys, inAddrs, outAddrs, amt, opts) {
     const defaultOpts = {
+        additionalFee: 0,
         certFilepaths: [],
         fee: null,
         offline: false,

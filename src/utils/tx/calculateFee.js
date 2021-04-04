@@ -13,6 +13,7 @@ module.exports = calculateFee;
 
 async function calculateFee(txPath, numInputs, numOutputs, protocolFilepath='./protocol.json', opts) {
     const defaultOpts = {
+        additionalFee: 0,
         testnet: false,
         witnessCount: 1,
         verbose: false,
@@ -47,7 +48,7 @@ async function calculateFee(txPath, numInputs, numOutputs, protocolFilepath='./p
     if (stdout) {
         let lines = stdout.split(/\r?\n/);
         const [ feeString ] = lines[0].split(/\s+/);
-        const fee = parseInt(feeString, 10);
+        const fee = parseInt(feeString, 10) + opts.additionalFee;
         if (Number.isNaN(fee)) {
             throw new Error(`failed to convert ${feeString} to an integer`);
         }

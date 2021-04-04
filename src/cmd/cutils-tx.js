@@ -33,6 +33,7 @@ async function run() {
             .option('--outTxFilepath <filepath>', 'Copy final transaction to the specified filepath.')
             .option('--keyDeposit', 'Include key deposit from protocol parameters', false)
             .option('--poolDeposit', 'Include pool deposit from protocol parameters', false)
+            .option('--fee <value>', 'Additional fee.', 0)
             .option('-t, --testnet', 'Use testnet magic', false)
             .option('--proto <filepath>', 'Filepath to the protocol parameters', './protocol.json')
             .option('--ttlDelay <value>', 'Set the TTL delay.', 10000)
@@ -55,6 +56,7 @@ async function run() {
         const opts = {
             certFilepaths: program.cert,
             debug: program.debug,
+            additionalFee: program.fee,
             outTxFilepath: program.outTxFilepath,
             protoFilepath: program.proto,
             testnet: program.testnet,
