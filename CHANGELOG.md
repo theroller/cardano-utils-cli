@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.1-beta](https://github.com/theroller/cardano-utils-cli/compare/v0.3.0-beta...v0.3.1-beta) (2021-04-04)
+
+
+### Bug Fixes
+
+* convert additional fee to integer ([75148ab](https://github.com/theroller/cardano-utils-cli/commit/75148abe5425054e68721ad7af15bd130252c202))
+
 ## [0.3.0-beta](https://github.com/theroller/cardano-utils-cli/compare/v0.2.1...v0.3.0-beta) (2021-04-04)
 
 
