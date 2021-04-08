@@ -353,6 +353,12 @@ cardano-cli query ledger-state --mary-era --mainnet | grep publicKey | grep $(ca
 
 **Block-Producer**
 ```bash
+# query rewards balance
+cardano-cli query stake-address-info --mary-era \
+    --address $(cat stake.addr) \
+    --mainnet
+    # --testnet-magic 1097911063
+
 # empty rewards
 # + tx-rewards.raw
 cutils tx 0 -t -v \
